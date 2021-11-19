@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="yedpay" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Yedpay</label>
+                <field id="active" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="sign_key" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sign Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="api_key" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="environment" translate="label" sortOrder="6" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Environment</label>
+                    <source_model>Yedpay\YedpayMagento\Model\Config\Source\Environment</source_model>
+                </field>
+                <field id="description" translate="label" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Description</label>
+                    <comment>Description displayed in Checkout page</comment>
+                    <backend_model>Yedpay\YedpayMagento\Model\Config\Backend\Description</backend_model>
+                </field>
+                <field id="payment_action" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment Action</label>
+                    <source_model>Yedpay\YedpayMagento\Model\Config\Source\PaymentAction</source_model>
+                </field>
+                <field id="gateway" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Gateway</label>
+                    <source_model>Yedpay\YedpayMagento\Model\Config\Source\Gateway</source_model>
+                </field>
+                <field id="wallet" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Wallet</label>
+                    <comment>Support Wallet (Applicable only for Alipay Online)</comment>
+                    <source_model>Yedpay\YedpayMagento\Model\Config\Source\Wallet</source_model>
+                </field>
+
+
+                <field id="expiry_time" translate="label" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Expiry time</label>
+                    <comment>Online Payment Expiry Time in seconds (900 - 10800)</comment>
+                    <validate>required-entry validate-digits-range digits-range-900-10800</validate>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,22 @@
+<div style="margin-top: 1rem">
+    <?php 
+    $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+    $order = $objectManager->create('Magento\Sales\Model\Order')->load($this->getRequest()->getParam('order_id'));
+    $paymentData = $order->getPayment()->getData()['additional_information'];
+    ?>
+    <table class="order-payment-additional-info">
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td>Payment Method</td>
+                <td>
+                    <?= isset($paymentData['payment_method']) ? $paymentData['payment_method'] : 'N/A' ?>
+                </td>
+            </tr>
+            <!-- TODO: display wallet if applicable -->
+        </tbody>
+    </table>
+</div>

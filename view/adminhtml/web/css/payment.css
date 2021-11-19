@@ -1,0 +1,20 @@
+table.order-payment-additional-info {
+    width: 100%;
+    color: rgb(105,105,105);
+}
+
+table.order-payment-additional-info > tbody td{
+    padding: 1rem;
+}
+
+table.order-payment-additional-info td:first-child {
+    font-weight: bold;
+}
+
+table.order-payment-additional-info tr:nth-child(odd) {
+    background: #f1f1f1;
+}
+
+table.order-payment-additional-info td:nth-child(even) {
+    text-align: right;
+}
