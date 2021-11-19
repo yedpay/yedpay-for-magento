@@ -1,0 +1,74 @@
+<?php
+
+namespace Yedpay\YedpayMagento\Model\Ui;
+
+use Yedpay\YedpayMagento\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
+use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+/**
+ * Class ConfigProvider
+ */
+class ConfigProvider implements ConfigProviderInterface
+{
+    const CODE = 'yedpay';
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var SessionManagerInterface
+     */
+    private $session;
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SessionManagerInterface $session
+     */
+    public function __construct(Config $config, SessionManagerInterface $session) 
+    {
+        $this->config = $config;
+        $this->session = $session;
+    }
+    /**
+     * Retrieve assoc array of checkout configuration
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        $storeId = $this->session->getStoreId();
+        return [
+            'payment' => [
+                self::CODE => [
+                    'isActive' => $this->config->isActive($storeId),
+                    'title' => $this->config->getTitle(),
+                    'paymentAction' => $this->config->getPaymentAction($storeId),
+                    'currency' => $this->config->getCurrency($storeId),
+                    'environment' => $this->config->getEnvironment($storeId),
+                ],
+            ],
+        ];
+    }
+    // /**
+    //  * Generate a new client token if necessary
+    //  * @return string
+    //  */
+    // public function getClientToken()
+    // {
+    //     if (empty($this->clientToken)) {
+    //         $params = [];
+    //         $storeId = $this->session->getStoreId();
+    //         $merchantAccountId = $this->config->getMerchantAccountId($storeId);
+    //         if (!empty($merchantAccountId)) {
+    //             $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
+    //         }
+    //         $this->clientToken = $this->adapterFactory->create($storeId)
+    //             ->generate($params);
+    //     }
+    //     return $this->clientToken;
+    // }
+}

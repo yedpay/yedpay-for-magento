@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+
+<preference for="Magento\Checkout\Block\Onepage\Success" type="Yedpay\YedpayMagento\Block\Success"/>
+
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="YedpayMagentoFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">Yedpay\YedpayMagento\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Yedpay\YedpayMagento\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">YedpayMagentoValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">YedpayMagentoCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <type name="Yedpay\YedpayMagento\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Yedpay\YedpayMagento\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="YedpayMagentoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">YedpayMagentoConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="YedpayMagentoConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Yedpay\YedpayMagento\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="YedpayMagentoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">YedpayMagentoAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">YedpayMagentoCaptureCommand</item>
+                <item name="sale" xsi:type="string">YedpayMagentoSaleCommand</item>
+                <item name="refund" xsi:type="string">YedpayMagentoRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorize Command -->
+    <virtualType name="YedpayMagentoAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">YedpayMagentoAuthorizationRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">Yedpay\YedpayMagento\Gateway\Response\OnlinePaymentHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\Client\OnlinePaymentTransaction</argument>
+        </arguments>
+    </virtualType>
+    <!-- Authorization Request Builder -->
+    <virtualType name="YedpayMagentoAuthorizationRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="payment" xsi:type="string">Yedpay\YedpayMagento\Gateway\Request\OnlinePaymentDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Authorize Command -->
+
+    <!-- Capture Command -->
+    <virtualType name="YedpayMagentoCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="client" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\Client\CaptureTransaction</argument>
+            <argument name="requestBuilder" xsi:type="object">YedpayMagentoCaptureRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">Yedpay\YedpayMagento\Gateway\Response\CaptureHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\TransferFactory</argument>
+        </arguments>
+    </virtualType>
+    <!-- Capture  Request Builder -->
+    <virtualType name="YedpayMagentoCaptureRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="capture" xsi:type="string">Yedpay\YedpayMagento\Gateway\Request\CaptureDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Capture Command -->
+
+    <!-- Sale(Authorization&Capture) command  -->
+    <virtualType name="YedpayMagentoSaleCommand" type="YedpayMagentoAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">YedpayMagentoSaleRequest</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="YedpayMagentoSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">YedpayMagentoAuthorizationRequestBuilder</item>
+                <item name="settlement" xsi:type="string">Yedpay\YedpayMagento\Gateway\Request\CaptureDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Sale(Authorization&Capture) -->
+    
+    <!-- Refund Command -->
+    <virtualType name="YedpayMagentoRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="client" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\Client\RefundByCustomIdTransaction</argument>
+            <argument name="requestBuilder" xsi:type="object">YedpayMagentoRefundRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">Yedpay\YedpayMagento\Gateway\Response\RefundByCustomIdHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Yedpay\YedpayMagento\Gateway\Http\TransferFactory</argument>
+        </arguments>
+    </virtualType>
+    <!-- Refund Request Builder -->
+    <virtualType name="YedpayMagentoRefundRequestBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="refund" xsi:type="string">Yedpay\YedpayMagento\Gateway\Request\RefundByCustomIdDataBuilder</item>
+                <!-- <item name="store" xsi:type="string">Yedpay\YedpayMagento\Gateway\Request\StoreConfigBuilder</item> -->
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Refund Command -->
+
+    <type name="Yedpay\YedpayMagento\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">Yedpay\YedpayMagento\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
+    <type name="Yedpay\YedpayMagento\Logger\YedpayLogHandler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Yedpay\YedpayMagento\Logger\YedpayLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">yedpay</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="info" xsi:type="object">Yedpay\YedpayMagento\Logger\YedpayLogHandler</item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>
