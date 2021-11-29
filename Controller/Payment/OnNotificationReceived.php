@@ -84,7 +84,7 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
                 $order->addStatusHistoryComment("Order status changed to {$order->getStatus()}.");
                 $this->yedpayLogger->info("[OnlinePayment Notification]: Transaction [{$transaction['transaction_id']}] Custom Id [{$transaction['custom_id']}] payment status changed to {$transaction['status']}");
                 $this->ori->save($order);
-                return;
+                die('success');
             }
 
             $storeId = $this->storeManager->getStore()->getId();
