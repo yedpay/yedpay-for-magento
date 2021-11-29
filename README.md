@@ -22,8 +22,8 @@ curl -sSL https://raw.githubusercontent.com/bitnami/bitnami-docker-magento/maste
 
 The docker-compose.yml file should be at `Home/yedpayuser/magento/docker-compose.yml`
 
-1.3 Create multiple folders with the following command.
-Warning: the command is case-sensitive so you may want to copy it just in case:
+1.3 Create folders with the following command.
+Warning: the command is case-sensitive:
 
 ```bash
 mkdir -p code/Yedpay
@@ -65,11 +65,9 @@ magento:
 
 ## 2. Setting up Yedpay/YedpayMagento
 
-2.1 At Home/yedpayuser/magento, run `sudo chmod -R 777 ./` so that you will be able to control files and folders with GUI. Make sure you run the command only when localhost:8081 is correctly shown. You may also choose to skip this step.
+2.1 Drag or input command to move `code/Yedpay/YedpayMagento` to `home/yedpayuser/magento/MagentoMount/bitnami/magento/app` folder. The path should look like this: `home/yedpayuser/magento/MagentoMount/app/code/Yedpay/YedpayMagento`
 
-2.2 Drag or input command to move `code/Yedpay/YedpayMagento` to `home/yedpayuser/magento/MagentoMount/bitnami/magento/app` folder. The path should look like this: `home/yedpayuser/magento/MagentoMount/app/code/Yedpay/YedpayMagento`
-
-2.3 Check if registration.php matches with your folder name `Yedpay/YedpayMagento`:
+2.2 Check if registration.php matches with your folder name `Yedpay/YedpayMagento`:
 
 ```bash
 <?php
@@ -80,20 +78,20 @@ magento:
 );
 ```
 
-2.4 Check if composer.json matches with your folder name `Yedpay/YedpayMagento`:
+2.3 Check if composer.json matches with your folder name `Yedpay/YedpayMagento`:
 
 ```bash
    "psr-4": {
      "Yedpay\\YedpayMagento\\": "",
 ```
 
-2.5 Enter bitnami shell at VS Code left sidebar: Docker > magento > right click docker.io/bitnami/magento > Attach shell.
+2.4 Enter bitnami shell at VS Code left sidebar: Docker > magento > right click docker.io/bitnami/magento > Attach shell.
 Inside the shell, run:
 ```bash
 cd bitnami/magento
 ```
 
-2.6 Run the following commands:
+2.5 Run the following commands:
 
 ```bash
 bin/magento cache:disable
@@ -103,14 +101,14 @@ bin/magento cache:enable
 
 Disabling cache is very important for `Yedpay_YedpayMagento` to work. Flushing or cleaning cache is not enough to do the work.
 
-2.7 If you see:
+2.6 If you see:
    `An error has happened during application run. See exception log for details.`
 
 Run `php bin/magento deploy:mode:set developer` to enable developer mode.
 
-2.8 Go to localhost:8081/admin. You should be able to see Yedpay at the admin page at System > Configuration > Sales > Payment method.
+2.7 Go to localhost:8081/admin. You should be able to see Yedpay at the admin page at System > Configuration > Sales > Payment method.
 
-2.9 In order for "Place order" to work, you must install yedpay/php-library in the magento folder **inside the docker**.
+2.8 In order for "Place order" to work, you must install yedpay/php-library in the magento folder **inside the docker**.
 
 ```bash
 composer require yedpay/php-library

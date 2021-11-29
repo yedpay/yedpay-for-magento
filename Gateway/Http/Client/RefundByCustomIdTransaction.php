@@ -11,21 +11,26 @@ use Yedpay\Response\Error;
 use Yedpay\YedpayMagento\Gateway\Config\Config;
 use Yedpay\YedpayMagento\Gateway\Request\OnlinePaymentDataBuilder;
 use Yedpay\YedpayMagento\Logger\YedpayLogger;
-use Yedpay\YedpayMagento\Setup\InstallData;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 class RefundByCustomIdTransaction extends AbstractTransaction
 {
     protected $config;
     protected $storeManager;
+    protected $ori;
+    protected $yedpayLogger;
 
 
     public function __construct(
         Config $config,
         StoreManagerInterface $storeManager,
+        OrderRepositoryInterface $ori,
         YedpayLogger $yedpayLogger
     ) {
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->ori = $ori;
         $this->yedpayLogger = $yedpayLogger;
     }
 
@@ -41,26 +46,32 @@ class RefundByCustomIdTransaction extends AbstractTransaction
         $apiKey = $this->config->getApiKey($storeId);
         $environment = $this->config->getEnvironment($storeId);
 
+        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+        $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($customId);
+        $payment = $order->getPayment();
+        $grandTotal = $payment->getAdditionalInformation('grand_total_before_create_creditmemo');
+
+        if ($grandTotal < 0){
+            $this->yedpayLogger->error('Yedpay Refund amount cannot be negative. Custom ID: ' . $customId);
+            $errorMsg = "Yedpay Refund amount cannot be negative.";
+            throw new \Exception($errorMsg);
+            return;
+        }
+
         try {
             $client = new Client($environment, $apiKey, false);
-            $refundResponse = $client->refundByCustomId($customId);
+            $refundResponse = $client->refundByCustomId($customId, null, $grandTotal);
         } catch (Exception $e) {
             $this->yedpayLogger->error($e->getMessage(), $e);
             throw new \Exception($e->getMessage());
         }
+        
         if ($refundResponse instanceof Error) {
             $errorMsg = "Cannot refund transaction $customId";
             $this->yedpayLogger->error($errorMsg);
             throw new \Exception($errorMsg);
         } else {
             $response = json_decode(json_encode($refundResponse->getData()), true);
-
-            $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-            $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($customId);
-            $order->setState(Order::STATE_CLOSED)->setStatus(InstallData::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
-            $order->save();
-            $this->yedpayLogger->info("[OnlinePayment Notification]: Transaction [{$customId}] payment status changed to {$order->getStatus()}");
-
             $response['success'] = true;
         }
 

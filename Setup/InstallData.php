@@ -24,6 +24,9 @@ class InstallData implements InstallDataInterface
     const ORDER_STATUS_YEDPAY_REFUNDED_CODE = 'yedpay_refunded';
     const ORDER_STATUS_YEDPAY_REFUNDED_LABEL = 'Payment Refunded (Yedpay)';
 
+    const ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE = 'yedpay_partial_refunded';
+    const ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL = 'Payment Partially Refunded (Yedpay)';
+
     protected $statusFactory;
     protected $statusResourceFactory;
 
@@ -58,6 +61,8 @@ class InstallData implements InstallDataInterface
 
         $data[] = ['status' => self::ORDER_STATUS_YEDPAY_CONFIRMED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_CONFIRMED_LABEL];
         $data[] = ['status' => self::ORDER_STATUS_YEDPAY_REFUNDED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_REFUNDED_LABEL];
+        $data[] = ['status' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL];
+        
         $setup->getConnection()->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $data);
 
         $setup->getConnection()->insertArray(
@@ -65,7 +70,8 @@ class InstallData implements InstallDataInterface
             ['status', 'state', 'is_default', 'visible_on_front'],
             [
                 [self::ORDER_STATUS_YEDPAY_CONFIRMED_CODE, Order::STATE_PROCESSING, '0', '1'],
-                [self::ORDER_STATUS_YEDPAY_REFUNDED_CODE, Order::STATE_CLOSED, '0', '1']
+                [self::ORDER_STATUS_YEDPAY_REFUNDED_CODE, Order::STATE_CLOSED, '0', '1'],
+                [self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE, Order::STATE_PROCESSING, '0', '1']
             ]
         );
         $setup->endSetup();

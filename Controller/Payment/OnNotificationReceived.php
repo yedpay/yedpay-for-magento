@@ -58,21 +58,32 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
         // Handle online payment and refund
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             parse_str(urldecode($this->getRequest()->getContent()), $data);
-            $this->yedpayLogger->info($this->getRequest()->getContent());
+            // $this->yedpayLogger->info($this->getRequest()->getContent());
 
             $transaction = $data['transaction'];
 
-            $this->yedpayLogger->info($transaction['status']);
+            // $this->yedpayLogger->info($transaction['status']);
 
             // Handle refund (adyen only)
 
             if ($transaction['status'] == self::PAYMENT_STATUS_REFUNDED || $transaction['status'] == self::PAYMENT_STATUS_VOID) {
 
+
                 $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
                 $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($transaction['custom_id']);
-                $order->setState(Order::STATE_CLOSED)->setStatus(InstallData::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
+                $orderGrandTotal = $order->getGrandTotal();
+                $refundedAmount = $transaction['refunded'];
+
+                // $this->yedpayLogger->info($order->getStatus());
+
+                if ($orderGrandTotal != $refundedAmount) {
+                    $order->setState(Order::STATE_PROCESSING)->setStatus(InstallData::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE);
+                } else {
+                    $order->setState(Order::STATE_CLOSED)->setStatus(InstallData::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
+                }
+                $order->addStatusHistoryComment("Order status changed to {$order->getStatus()}.");
+                $this->yedpayLogger->info("[OnlinePayment Notification]: Transaction [{$transaction['transaction_id']}] Custom Id [{$transaction['custom_id']}] payment status changed to {$transaction['status']}");
                 $this->ori->save($order);
-                $this->yedpayLogger->info("[OnlinePayment Notification]: Transaction [{$transaction['transaction_id']}] payment status changed to {$transaction['status']}");
                 return;
             }
 
