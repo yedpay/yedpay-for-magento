@@ -2,4 +2,8 @@
     <event name="payment_method_assign_data_yedpay">
         <observer name="yedpay_gateway_data_assign" instance="Yedpay\YedpayMagento\Observer\DataAssignObserver" />
     </event>
+    <event name="adminhtml_sales_order_creditmemo_register_before">
+        <observer name="yedpay_adminhtml_sales_order_creditmemo_register_before" instance="Yedpay\YedpayMagento\Observer\AdminhtmlSalesOrderCreditmemoRegisterBefore" />
+    </event>
+
 </config>

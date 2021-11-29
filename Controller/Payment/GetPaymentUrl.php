@@ -72,10 +72,10 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
                 ->setNotifyUrl($notifyUrl)
                 ->setReturnUrl($returnUrl)
                 ->setExpiryTime($this->config->getExpiryTime())
-                // ->setMetadata(json_encode([
-                //     'yedpay_for_magento' => $this->yedpay_version,
-                //     'magento' => '2.4.3',
-                // ]))
+                ->setMetadata(json_encode([
+                    'yedpay_for_magento' => $this->yedpay_version,
+                    'magento' => '2.4.3',
+                ]))
                 ;
             if ($gatewayCode) {
                 $client->setGatewayCode($gatewayCode);
