@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Success Page</title>
+    </head>
+    <body>
+        <referenceBlock name="page.main.title" remove="true">
+            <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success.print.button" template="Magento_Checkout::button.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Yedpay\YedpayMagento\Block\Success" name="checkout.success" template="Yedpay_YedpayMagento::checkout/success.phtml" cacheable="false">
+                <container name="order.success.additional.info" label="Order Success Additional Info"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

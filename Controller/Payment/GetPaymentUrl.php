@@ -129,7 +129,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
     function buildReturnUrl(): string
     {
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
-        $url = $baseUrl . 'checkout/onepage/success';
+        $url = $baseUrl . 'yedpay/order/checkout';
         return $url;
     }
 

@@ -19,13 +19,11 @@
             <p><?php echo __('Your order # is: <span>%1</span>.', $block->escapeHtml($block->getOrderId())) ?></p>
         <?php endif; ?>
 
-        <!-- BEGIN VENDOR_MODULE CUSTOM -->
         <p><?php echo __('You ordered %1 items.', (int) $block->getOrder()->getTotalQtyOrdered()) ?></p>
-        <!-- END VENDOR_MODULE CUSTOM -->
-
-        <p><?php /* @escapeNotVerified */ echo __('We\'ll email you an order confirmation with details and tracking info.') ?></p>
+        <p><?php echo __('Payment method: ' . $block->getPaymentMethod()) ?></p>
     <?php endif; ?>
 
+    <br />
     <?php echo $block->getAdditionalInfoHtml() ?>
 
     <div class="actions-toolbar">

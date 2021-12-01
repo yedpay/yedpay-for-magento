@@ -54,7 +54,7 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
     }
 
     public function execute()
-    {
+    {   
         // Handle online payment and refund
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             parse_str(urldecode($this->getRequest()->getContent()), $data);
