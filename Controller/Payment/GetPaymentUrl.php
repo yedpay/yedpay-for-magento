@@ -93,7 +93,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
 
         if ($onlinePayment instanceof Error) {
             $message = "Unable to process with gateway. Please contact store owner.";
-            $logMessage = "[OnlinePayment] Server message: ";
+            $logMessage = "[OnlinePayment] Yedpay Server message: ";
             $this->yedpayLogger->error(
                 $onlinePayment->getMessage() ? "$logMessage {$onlinePayment->getMessage()}" : $logMessage,
                 $onlinePayment->getErrors() ?? []
