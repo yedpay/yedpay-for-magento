@@ -198,37 +198,30 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         switch ($this->getValue(Config::KEY_GATEWAY_LOGO)) {
             case 'ALL':
                 $icon_path = $this->getLogoPath('all');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_all.svg");
                 break;
 
             case '4':
                 $icon_path = $this->getLogoPath('4_2_all');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_alipay.svg");
                 break;
 
             case '4HK':
                 $icon_path = $this->getLogoPath('4_2_HK');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_alipay_hk.svg");
                 break;
 
             case '4CN':
                 $icon_path = $this->getLogoPath('4_2_CN');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_alipay_cn.svg");
                 break;
 
             case '8':
                 $icon_path = $this->getLogoPath('8_2');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_wechatpay.svg");
                 break;
 
             case '9':
                 $icon_path = $this->getLogoPath('9_1');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_unionpay.svg");
                 break;
 
             case '12VM':
                 $icon_path = $this->getLogoPath('12_1');
-                // $icon_path = $this->getViewFileUrl("Yedpay_YedpayMagento::img/methods/yedpay_vm.svg");
                 break;
 
             case '4_8_9':
