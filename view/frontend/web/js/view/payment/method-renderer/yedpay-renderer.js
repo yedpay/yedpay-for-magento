@@ -81,8 +81,11 @@ define([
 
         getYedpayDescription: function () {
             return window.checkoutConfig.payment.yedpay.description;
-        }
+        },
 
+        getYedpayGatewayLogoImgSrc: function () {
+            return window.checkoutConfig.payment.yedpay.gatewayLogoImgSrc;
+        }
     });
     
 });

@@ -13,8 +13,8 @@ class Wallet implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             '' => 'All',
-            '1' => 'Hong Kong Wallet',
-            '2' => 'China Wallet',
+            'HK' => 'Hong Kong Wallet',
+            'CN' => 'China Wallet',
         ];
     }
 }

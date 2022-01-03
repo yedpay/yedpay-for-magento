@@ -25,6 +25,7 @@
                     <label>Environment</label>
                     <source_model>Yedpay\YedpayMagento\Model\Config\Source\Environment</source_model>
                 </field>
+                
                 <field id="description" translate="label" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Description</label>
                     <comment>Description displayed in Checkout page</comment>
@@ -36,14 +37,19 @@
                 </field>
                 <field id="gateway" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Gateway</label>
+                    <comment>Supporting Gateway(s)</comment>
                     <source_model>Yedpay\YedpayMagento\Model\Config\Source\Gateway</source_model>
                 </field>
                 <field id="wallet" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Wallet</label>
-                    <comment>Support Wallet (Applicable only for Alipay Online)</comment>
+                    <comment>Supporting Wallet(s) (Applicable only for Alipay Online)</comment>
                     <source_model>Yedpay\YedpayMagento\Model\Config\Source\Wallet</source_model>
                 </field>
-
+                <field id="gateway_logo" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Gateway Logo</label>
+                    <comment>This controls the logos which the user sees on Magento checkout page</comment>
+                    <source_model>Yedpay\YedpayMagento\Model\Config\Source\GatewayLogo</source_model>
+                </field>
 
                 <field id="expiry_time" translate="label" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Expiry time</label>

@@ -30,6 +30,7 @@ class AdditionalConfigProvider implements ConfigProviderInterface {
                 ConfigProvider::CODE => [
                     'logoSrc' => 'https://www.yedpay.com/images/main-logo-dark.svg',
                     'description' => $this->config->getDescription(),
+                    'gatewayLogoImgSrc' => $this->config->getGatewayLogo(),
                 ],
             ],
         ];
