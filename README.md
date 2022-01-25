@@ -18,8 +18,28 @@ php bin/Magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento cache:flush
 ```
-8. If you are running Yedpay for Magento on production, run `php bin/magento setup:static-content:deploy`
-9. Log out from Magento admin panel and login again. You will see Yedpay at *"Stores"* > *"Configuration"* > *"Sales"* > *"Payment Methods"* > *"Other Payment Methods"*.
+7. If you are running Yedpay for Magento on production, run `php bin/magento setup:static-content:deploy`
+8. Log out from Magento admin panel and login again. You will see Yedpay at *"Stores"* > *"Configuration"* > *"Sales"* > *"Payment Methods"* > *"Other Payment Methods"*.
+
+### Install from composer
+Follow the below instructions once you have chosen Yedpay for Magento from Magento Marketplace.
+
+1. Log in to Magento Marketplace.
+2. Select "My Profile" at the top right hand corner of the page.
+3. Navigate to "My Purchases" under "My Products".
+4. Copy the component name and version number to form a command as follows:
+```
+composer require yedpay/yedpaymagento:1.0.0
+```
+5. Enter access keys generated from Magento Marketplace.
+6. Set up Yedpay for Magento Module.
+```
+php bin/Magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento cache:flush
+```
+7. If you are running Yedpay for Magento on production, run `php bin/magento setup:static-content:deploy`
+8. Log out from Magento admin panel and login again. You will see Yedpay at *"Stores"* > *"Configuration"* > *"Sales"* > *"Payment Methods"* > *"Other Payment Methods"*.
 
 ### Configuration
 
