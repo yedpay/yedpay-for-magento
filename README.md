@@ -1,4 +1,4 @@
-# YedPay for Magento Extension
+# Yedpay for Magento Extension
 
 ## Description
 
@@ -8,19 +8,17 @@ Yedpay for Magento allows merchants to use Alipay, WeChat Pay, UnionPay, Visa an
 
 1. Download yedpay-for-magento extension.
 2. Navigate to your Magento store root folder.
-3. Access `path_to_your_Magento_directory/app/code/`, create `app/code` if not already exists.
-4. Create `app/code/Yedpay/YedpayMagento`.
-5. Extract the module content to `path_to_your_Magento_directory/app/code/Yedpay/YedpayMagento`.
-6. Install Yedpay PHP Library.
+3. Create `path_to_your_Magento_directory/app/code/Yedpay/YedpayMagento`.
+4. Extract the module content to `path_to_your_Magento_directory/app/code/Yedpay/YedpayMagento`.
+5. Install Yedpay PHP Library.
 `composer require yedpay/php-library`
-7. Set up Yedpay for Magento Module.
+6. Set up Yedpay for Magento Module.
 ```
 php bin/Magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento cache:flush
 ```
-8. If you are running Yedpay for Magento on production, run the follow command.
-`php bin/magento setup:static-content:deploy`
+8. If you are running Yedpay for Magento on production, run `php bin/magento setup:static-content:deploy`
 9. Log out from Magento admin panel and login again. You will see Yedpay at *"Stores"* > *"Configuration"* > *"Sales"* > *"Payment Methods"* > *"Other Payment Methods"*.
 
 ### Configuration
@@ -37,14 +35,14 @@ php bin/magento cache:flush
 
 #### Sign Key
 
-1. Log into [YedPay's Merchant Portal](https://merchant.yedpay.com) as owner.
+1. Log into [Yedpay's Merchant Portal](https://merchant.yedpay.com) as owner.
 2. Navigate to "App Keys" *(Admin > App Keys)*.
 3. If Sign Key is absent, click the "Generate" button.
 4. Copy the "Sign Key" shown.
 
 #### API Key
 
-1. Log into [YedPay's Merchant Portal](https://merchant.yedpay.com) as owner.
+1. Log into [Yedpay's Merchant Portal](https://merchant.yedpay.com) as owner.
 2. Navigate to "App Keys" *(Admin > App Keys)*.
 3. In the "API Keys" section, click the "Add" button.
 4. Enter "Key Name" and select your online store, then click the "Add" button again to get a new API Key.
