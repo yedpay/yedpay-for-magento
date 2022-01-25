@@ -58,7 +58,7 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
         // Handle online payment and refund
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             parse_str(urldecode($this->getRequest()->getContent()), $data);
-            // $this->yedpayLogger->info($this->getRequest()->getContent());
+            $this->yedpayLogger->info($this->getRequest()->getContent());
 
             $transaction = $data['transaction'];
 
@@ -81,6 +81,8 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
                 } else {
                     $order->setState(Order::STATE_CLOSED)->setStatus(InstallData::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
                 }
+
+                $order->addStatusHistoryComment($this->getRefundInformation($data['transaction']));
                 $order->addStatusHistoryComment("Order status changed to {$order->getStatus()}.");
                 $this->yedpayLogger->info("[OnlinePayment Notification]: Transaction [{$transaction['transaction_id']}] Custom Id [{$transaction['custom_id']}] payment status changed to {$transaction['status']}");
                 $this->ori->save($order);
@@ -127,6 +129,7 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
             }
 
             $order = reset($orderList);
+
             $payment = $order->getPayment();
             $paymentCustomId = $payment->getAdditionalInformation(DataAssignObserver::CUSTOM_ID);
             if ($customId != $paymentCustomId) {
@@ -148,6 +151,8 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
             $payment->update();
 
             $order->setState($newOrderStatus)->setStatus(InstallData::ORDER_STATUS_YEDPAY_CONFIRMED_CODE);
+            $order->addStatusHistoryComment($this->getTransactionInformation($data['transaction']));
+
             $transaction->save();
 
             $this->ori->save($order);
@@ -181,5 +186,43 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
     public function validateForCsrf(RequestInterface $request): ?bool
     {
         return true;
+    }
+
+    /**
+     * Show Transaction Information
+     *
+     * @param array $payment_data
+     * @return string
+     */
+    protected function getTransactionInformation($payment_data)
+    {
+        return  '<b>Yedpay Transaction Information: </b><br>
+                Order ID: ' . $payment_data['custom_id'] . '<br>
+                Yedpay Transaction ID: ' . $payment_data['transaction_id'] . '<br>
+                Transaction ID: ' . $payment_data['id'] . '<br>
+                Gateway: ' . $payment_data['payment_method'] . '<br>
+                Status: ' . $payment_data['status'] . '<br>
+                Amount: ' . $payment_data['amount'] . '<br>
+                Currency: ' . $payment_data['currency'] . '<br>
+                Paid Time: ' . $payment_data['paid_at'];
+    }
+
+    /**
+     * Show Refund Information
+     *
+     * @param array $refund_data
+     * @return string
+     */
+    protected function getRefundInformation($refund_data)
+    {
+        return  '<b>Yedpay Refund Information:</b><br>
+                Order ID: ' . $refund_data['custom_id'] . '<br>
+                Yedpay Transaction ID: ' . $refund_data['transaction_id'] . '<br>
+                Transaction ID: ' . $refund_data['id'] . '<br>
+                Gateway: ' . $refund_data['payment_method'] . '<br>
+                Status: ' . $refund_data['status'] . '<br>
+                Refunded Amount: ' . $refund_data['refunded'] . '<br>
+                Currency: ' . $refund_data['currency'] . '<br>
+                Refund Time: ' . $refund_data['refunded_at'];
     }
 }
