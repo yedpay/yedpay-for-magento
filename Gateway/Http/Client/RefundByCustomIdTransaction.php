@@ -21,7 +21,6 @@ class RefundByCustomIdTransaction extends AbstractTransaction
     protected $ori;
     protected $yedpayLogger;
 
-
     public function __construct(
         Config $config,
         StoreManagerInterface $storeManager,
@@ -47,15 +46,14 @@ class RefundByCustomIdTransaction extends AbstractTransaction
         $environment = $this->config->getEnvironment($storeId);
 
         $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-        $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($customId);
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($customId);
         $payment = $order->getPayment();
         $grandTotal = $payment->getAdditionalInformation('grand_total_before_create_creditmemo');
 
-        if ($grandTotal < 0){
+        if ($grandTotal < 0) {
             $this->yedpayLogger->error('Yedpay Refund amount cannot be negative. Custom ID: ' . $customId);
             $errorMsg = "Yedpay Refund amount cannot be negative.";
-            throw new \Exception($errorMsg);
-            return;
+            throw new \InvalidArgumentException($errorMsg);
         }
 
         try {
@@ -63,13 +61,13 @@ class RefundByCustomIdTransaction extends AbstractTransaction
             $refundResponse = $client->refundByCustomId($customId, null, $grandTotal);
         } catch (Exception $e) {
             $this->yedpayLogger->error($e->getMessage(), $e);
-            throw new \Exception($e->getMessage());
+            throw new \InvalidArgumentException($e->getMessage());
         }
-        
+
         if ($refundResponse instanceof Error) {
             $errorMsg = "Cannot refund transaction $customId";
             $this->yedpayLogger->error($errorMsg);
-            throw new \Exception($errorMsg);
+            throw new \LocalizedException($errorMsg);
         } else {
             $response = json_decode(json_encode($refundResponse->getData()), true);
             $response['success'] = true;

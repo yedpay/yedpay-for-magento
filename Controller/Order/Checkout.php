@@ -6,7 +6,6 @@ use Exception;
 use Magento\Framework\App\Action\Context;
 use Yedpay\YedpayMagento\Logger\YedpayLogger;
 
-
 class Checkout extends \Magento\Framework\App\Action\Action
 {
     protected $_resultPageFactory;

@@ -6,7 +6,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Yedpay\YedpayMagento\Gateway\Config\Config;
 use Yedpay\YedpayMagento\Model\Ui\ConfigProvider;
 
-class AdditionalConfigProvider implements ConfigProviderInterface {
+class AdditionalConfigProvider implements ConfigProviderInterface
+{
 
     /**
      * @var Config
@@ -19,12 +20,13 @@ class AdditionalConfigProvider implements ConfigProviderInterface {
      * @param Config $config
      * @param SessionManagerInterface $session
      */
-    public function __construct(Config $config) 
+    public function __construct(Config $config)
     {
         $this->config = $config;
     }
     
-    public function getConfig() {
+    public function getConfig()
+    {
         return [
             'payment' => [
                 ConfigProvider::CODE => [
@@ -34,5 +36,5 @@ class AdditionalConfigProvider implements ConfigProviderInterface {
                 ],
             ],
         ];
-    }       
+    }
 }

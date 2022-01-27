@@ -30,6 +30,5 @@ class AdminhtmlSalesOrderCreditmemoRegisterBefore implements \Magento\Framework\
         $grandTotal = $creditmemo->getGrandTotal();
 
         $payment->setAdditionalInformation('grand_total_before_create_creditmemo', $grandTotal)->save();
-
     }
 }

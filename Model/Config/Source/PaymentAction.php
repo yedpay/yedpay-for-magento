@@ -5,7 +5,8 @@ namespace Yedpay\YedpayMagento\Model\Config\Source;
 use Magento\Payment\Model\MethodInterface;
 
 class PaymentAction implements \Magento\Framework\Option\ArrayInterface
-{ 
+{
+
     /**
      * Return array of options as value-label pairs, eg. value => label
      *
@@ -23,5 +24,5 @@ class PaymentAction implements \Magento\Framework\Option\ArrayInterface
                 'label' => __('Authorize and Capture'),
             ]
         ];
-    }   
+    }
 }

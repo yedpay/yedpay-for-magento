@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Yedpay\YedpayMagento\Logger\YedpayLogger;
 
 /**
- * Class Config
+ * Get Config Information
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -44,11 +44,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         DirectoryList $dir,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN,
-        YedpayLogger $yedpayLogger,
         RequestInterface $request,
-        Repository $assetRepo
+        Repository $assetRepo,
+        YedpayLogger $yedpayLogger,
+        $methodCode = null,
+        $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
         $this->yedpayLogger = $yedpayLogger;
@@ -290,7 +290,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         }
         return $icon_path;
     }
-
 
     public function getExpiryTime()
     {

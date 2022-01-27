@@ -23,7 +23,7 @@ class RefundByCustomIdDataBuilder implements BuilderInterface
      */
     public function __construct(
         SubjectReader $subjectReader,
-        OrderRepository $ori, 
+        OrderRepository $ori,
         SearchCriteriaBuilder $sci,
         YedpayLogger $yedpayLogger
     ) {
@@ -48,7 +48,7 @@ class RefundByCustomIdDataBuilder implements BuilderInterface
 
         $amountPaid = $this->getAmountPaid($customId);
         if (bccomp($amountPaid, $buildSubject['amount']) !== 0) {
-            throw new Exception('Refund amount should be same as order amount');
+            throw new InputException('Refund amount should be same as order amount');
         }
 
         $result = [
@@ -67,11 +67,10 @@ class RefundByCustomIdDataBuilder implements BuilderInterface
         $searchCriteria = $this->sci->addFilter('increment_id', $customId, 'eq')->create();
         $orderList = $this->ori->getList($searchCriteria)->getItems();
 
-        if(!$orderList)
-        {
+        if (!$orderList) {
             $message = "No orders with CustomId [$customId] was found.";
             $this->yedpayLogger->error($message);
-            throw new Exception($message);
+            throw new NotFoundException($message);
         }
 
         $order = reset($orderList);

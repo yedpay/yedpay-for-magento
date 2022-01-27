@@ -113,7 +113,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
      * @param Array $data
      * @return ResultInterface
      */
-    function jsonResponse(int $statusCode, array $data)
+    private function jsonResponse(int $statusCode, array $data)
     {
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setHttpResponseCode($statusCode);
@@ -126,7 +126,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
      * Build returnUrl for redirection after payment
      * @return string
      */
-    function buildReturnUrl(): string
+    private function buildReturnUrl(): string
     {
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
         $url = $baseUrl . 'yedpay/order/checkout';
@@ -137,7 +137,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
      * Build notifyUrl for receiving notification from gateway server
      * @return string
      */
-    function buildNotifyUrl(): string
+    private function buildNotifyUrl(): string
     {
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
         $url = $baseUrl . 'yedpay/payment/onnotificationreceived';
@@ -148,7 +148,7 @@ class GetPaymentUrl extends \Magento\Framework\App\Action\Action
      * Randomly generate a customId for future identification purpose with payment gateway
      * @return string
      */
-    function getCustomId($quoteId): string
+    private function getCustomId($quoteId): string
     {
         $quote = $this->quoteRepository->getActive($quoteId);
         $quote->reserveOrderId();
