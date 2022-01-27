@@ -2,7 +2,7 @@
 
 namespace Yedpay\YedpayMagento\Block;
 
-class Form extends \Magento\Payment\Block\Form 
+class Form extends \Magento\Payment\Block\Form
 {
 
 }

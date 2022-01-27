@@ -2,33 +2,40 @@
 
 /** @var $block \Yedpay\YedpayMagento\Block\Success */ ?>
 <div class="checkout-success">
-    <?php if ($_GET['status'] == 'cancelled') : ?>
+<?php $request_status = filter_input(INPUT_GET, 'status') ?>
+    <?php if ($request_status === 'cancelled'): ?>
         <?php
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($_GET['custom_id']);
+        $custom_id = filter_input(INPUT_GET, 'custom_id');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($custom_id);
         $order->setState('canceled')->setStatus('canceled');
         $order->save();
         ?>
-        <h1><?php echo __('Payment failure') ?></h1>
-        <p><?php echo __('The order is cancelled by the customer.') ?></p>
-    <?php elseif ($block->getOrderId()) : ?>
-        <h1><?php echo __('Thank you for your purchase!') ?></h1>
-        <?php if ($block->getCanViewOrder()) : ?>
-            <p><?php echo __('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeHtml($block->getViewOrderUrl()), $block->escapeHtml($block->getOrderId()))) ?></p>
-        <?php else : ?>
-            <p><?php echo __('Your order # is: <span>%1</span>.', $block->escapeHtml($block->getOrderId())) ?></p>
+        <h1><?= $block->escapeHtmlAttr('Payment failure') ?></h1>
+        <p><?= $block->escapeHtmlAttr('The order is cancelled by the customer.') ?></p>
+    <?php elseif ($block->getOrderId()): ?>
+        <h1><?= $block->escapeHtmlAttr('Thank you for your purchase!') ?></h1>
+        <?php if ($block->getCanViewOrder()): ?>
+
+        <?php else: ?>
+            <?php $orderId = $block->escapeHtml($block->getOrderId()) ?>
+            <p><?=/* @noEscape */ 'Your order # is: ' . $orderId ?></p>
         <?php endif; ?>
 
-        <p><?php echo __('You ordered %1 items.', (int) $block->getOrder()->getTotalQtyOrdered()) ?></p>
-        <p><?php echo __('Payment method: ' . $block->getPaymentMethod()) ?></p>
+        <?php $itemNo = (int) $block->getOrder()->getTotalQtyOrdered() ?>
+        <p><?= /* @noEscape */ 'You ordered ' . $itemNo . 'items' ?></p>
+        <p><?= $block->escapeHtmlAttr('Payment method: ' . $block->getPaymentMethod()) ?></p>
     <?php endif; ?>
 
     <br />
-    <?php echo $block->getAdditionalInfoHtml() ?>
+    <?= $block->getAdditionalInfoHtml() ?>
 
     <div class="actions-toolbar">
         <div class="primary">
-            <a class="action primary continue" href="<?php /* @escapeNotVerified */ echo $block->getUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Continue Shopping') ?></span></a>
+            <a class="action primary continue"
+               href="<?= /* @noEscape */ $block->getUrl() ?>">
+               <span><?= /* @escapeNotVerified */ ('Continue Shopping') ?></span>
+            </a>
         </div>
     </div>
 </div>

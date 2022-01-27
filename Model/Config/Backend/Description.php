@@ -45,5 +45,4 @@ class Description extends \Magento\Framework\App\Config\Value
 
         parent::beforeSave();
     }
-
 }

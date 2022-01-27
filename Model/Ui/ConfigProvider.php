@@ -6,9 +6,7 @@ use Yedpay\YedpayMagento\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Session\SessionManagerInterface;
-/**
- * Class ConfigProvider
- */
+
 class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'yedpay';
@@ -28,7 +26,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @param Config $config
      * @param SessionManagerInterface $session
      */
-    public function __construct(Config $config, SessionManagerInterface $session) 
+    public function __construct(Config $config, SessionManagerInterface $session)
     {
         $this->config = $config;
         $this->session = $session;
@@ -53,22 +51,4 @@ class ConfigProvider implements ConfigProviderInterface
             ],
         ];
     }
-    // /**
-    //  * Generate a new client token if necessary
-    //  * @return string
-    //  */
-    // public function getClientToken()
-    // {
-    //     if (empty($this->clientToken)) {
-    //         $params = [];
-    //         $storeId = $this->session->getStoreId();
-    //         $merchantAccountId = $this->config->getMerchantAccountId($storeId);
-    //         if (!empty($merchantAccountId)) {
-    //             $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
-    //         }
-    //         $this->clientToken = $this->adapterFactory->create($storeId)
-    //             ->generate($params);
-    //     }
-    //     return $this->clientToken;
-    // }
 }

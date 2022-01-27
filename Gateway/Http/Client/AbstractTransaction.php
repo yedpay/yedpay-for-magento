@@ -59,7 +59,7 @@ abstract class AbstractTransaction implements ClientInterface
     /**
      * Process http request
      * @param array $data
-     * @return 
+     * @return
      */
     abstract protected function process(TransferInterface $transferObject);
 }

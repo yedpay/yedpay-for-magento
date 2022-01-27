@@ -1,6 +1,6 @@
 {
   "name": "yedpay/yedpay-magento",
-  "description": "A Magento 2 Extension to Integrate payment through Yedpay.",
+  "description": "A Magento 2 Extension to integrate payment through Yedpay.",
   "require": {
     "php": ">=5.6",
     "magento/module-sales": "100.3.*",

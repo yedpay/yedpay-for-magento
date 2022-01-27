@@ -14,7 +14,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status as StatusResource;
 use Magento\Sales\Model\ResourceModel\Order\StatusFactory as StatusResourceFactory;
 
 /**
- * Class InstallData
+ * Install Yedpay Status and State
  */
 class InstallData implements InstallDataInterface
 {
@@ -59,10 +59,21 @@ class InstallData implements InstallDataInterface
         $installer = $setup;
         $installer->startSetup();
 
-        $data[] = ['status' => self::ORDER_STATUS_YEDPAY_CONFIRMED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_CONFIRMED_LABEL];
-        $data[] = ['status' => self::ORDER_STATUS_YEDPAY_REFUNDED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_REFUNDED_LABEL];
-        $data[] = ['status' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE, 'label' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL];
-        
+        $data[] = [
+            'status' => self::ORDER_STATUS_YEDPAY_CONFIRMED_CODE,
+            'label' => self::ORDER_STATUS_YEDPAY_CONFIRMED_LABEL
+        ];
+
+        $data[] =[
+            'status' => self::ORDER_STATUS_YEDPAY_REFUNDED_CODE,
+            'label' => self::ORDER_STATUS_YEDPAY_REFUNDED_LABEL
+        ];
+
+        $data[] = [
+            'status' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE,
+            'label' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL
+        ];
+
         $setup->getConnection()->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $data);
 
         $setup->getConnection()->insertArray(
