@@ -15,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Yedpay\YedpayMagento\Gateway\Config\Config;
 use Yedpay\YedpayMagento\Observer\DataAssignObserver;
 use Yedpay\YedpayMagento\Logger\YedpayLogger;
-use Yedpay\YedpayMagento\Setup\InstallData;
+use Yedpay\YedpayMagento\Setup\Patch\Data\AddYedpayStatus;
 use Magento\Sales\Model\Order;
 use Yedpay\Client;
 use Magento\Framework\Webapi\Rest\Request;
@@ -85,9 +85,9 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
 
             if ($orderGrandTotal != $refundedAmount) {
                 $order->setState(Order::STATE_PROCESSING)
-                    ->setStatus(InstallData::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE);
+                    ->setStatus(AddYedpayStatus::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE);
             } else {
-                $order->setState(Order::STATE_CLOSED)->setStatus(InstallData::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
+                $order->setState(Order::STATE_CLOSED)->setStatus(AddYedpayStatus::ORDER_STATUS_YEDPAY_REFUNDED_CODE);
             }
 
             $order->addStatusHistoryComment($this->getRefundInformation($data['transaction']));
@@ -172,7 +172,7 @@ class OnNotificationReceived extends \Magento\Framework\App\Action\Action implem
         $payment->setAdditionalInformation($additionalInformation);
         $payment->update();
 
-        $order->setState($newOrderStatus)->setStatus(InstallData::ORDER_STATUS_YEDPAY_CONFIRMED_CODE);
+        $order->setState($newOrderStatus)->setStatus(AddYedpayStatus::ORDER_STATUS_YEDPAY_CONFIRMED_CODE);
         $order->addStatusHistoryComment($this->getTransactionInformation($data['transaction']));
 
         $transaction->save();
