@@ -1,22 +1,12 @@
 <?php
-/* File: app/code/Atwix/OrderFlow/Setup/InstallData.php */
-namespace Yedpay\YedpayMagento\Setup;
 
-use Exception;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
+namespace Yedpay\YedpayMagento\Setup\Patch\Data;
+
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Status;
-use Magento\Sales\Model\Order\StatusFactory;
-use Magento\Sales\Model\ResourceModel\Order\Status as StatusResource;
-use Magento\Sales\Model\ResourceModel\Order\StatusFactory as StatusResourceFactory;
 
-/**
- * Install Yedpay Status and State
- */
-class InstallData implements InstallDataInterface
+class AddYedpayStatus implements DataPatchInterface
 {
     const ORDER_STATUS_YEDPAY_CONFIRMED_CODE = 'yedpay_confirmed';
     const ORDER_STATUS_YEDPAY_CONFIRMED_LABEL = 'Payment Confirmed (Yedpay)';
@@ -27,37 +17,20 @@ class InstallData implements InstallDataInterface
     const ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE = 'yedpay_partial_refunded';
     const ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL = 'Payment Partially Refunded (Yedpay)';
 
-    protected $statusFactory;
-    protected $statusResourceFactory;
+    private $moduleDataSetup;
 
-    /**
-     * InstallData constructor
-     *
-     * @param StatusFactory $statusFactory
-     * @param StatusResourceFactory $statusResourceFactory
-     */
     public function __construct(
-        StatusFactory $statusFactory,
-        StatusResourceFactory $statusResourceFactory
-    ) {
-        $this->statusFactory = $statusFactory;
-        $this->statusResourceFactory = $statusResourceFactory;
-    }
+       ModuleDataSetupInterface $moduleDataSetup
 
-    /**
-     * Installs data for a module
-     *
-     * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+     ) {
+
+        $this->moduleDataSetup = $moduleDataSetup;
+
+    }
+    public function apply()
     {
-        $installer = $setup;
-        $installer->startSetup();
+        $this->moduleDataSetup->startSetup();
+        $setup = $this->moduleDataSetup;
 
         $data[] = [
             'status' => self::ORDER_STATUS_YEDPAY_CONFIRMED_CODE,
@@ -74,7 +47,11 @@ class InstallData implements InstallDataInterface
             'label' => self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_LABEL
         ];
 
-        $setup->getConnection()->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $data);
+         $setup->getConnection()->insertArray(
+            $setup->getTable('sales_order_status'),
+            ['status', 'label'],
+            $data
+        );
 
         $setup->getConnection()->insertArray(
             $setup->getTable('sales_order_status_state'),
@@ -85,6 +62,15 @@ class InstallData implements InstallDataInterface
                 [self::ORDER_STATUS_YEDPAY_PARTIAL_REFUNDED_CODE, Order::STATE_PROCESSING, '0', '1']
             ]
         );
+
         $setup->endSetup();
+    }
+    public function getAliases()
+    {
+        return [];
+    }
+    public static function getDependencies()
+    {
+        return [];
     }
 }
